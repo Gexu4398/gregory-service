@@ -462,7 +462,7 @@
       ]
     },
     {
-      "clientScope" : "department:crud",
+      "clientScope" : "group:crud",
       "roles" : [
         "super_admin"
       ]
@@ -734,7 +734,7 @@
         "role:crud",
         "user:crud",
         "roles",
-        "department:crud",
+        "group:crud",
         "profile",
         "basic"
       ],
@@ -1012,7 +1012,7 @@
     },
     {
       "id" : "f225a23c-5df8-49ef-9619-c9d73a113368",
-      "name" : "department:crud",
+      "name" : "group:crud",
       "description" : "部门增删改",
       "protocol" : "openid-connect",
       "attributes" : {

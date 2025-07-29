@@ -53,11 +53,11 @@ class RoleControllerTest extends KeycloakIntegrationTestEnvironment {
     final var role = dataHelper.newRole(faker.name().title());
     mockMvc.perform(put("/role/" + role.getName())
             .contentType(MediaType.APPLICATION_JSON)
-            .content(JSONUtil.toJsonStr(Set.of("role:crud", "department:crud"))))
+            .content(JSONUtil.toJsonStr(Set.of("role:crud", "group:crud"))))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.scopes.length()", equalTo(2)))
         .andExpect(jsonPath("$.scopes", hasItem("role:crud")))
-        .andExpect(jsonPath("$.scopes", hasItem("department:crud")));
+        .andExpect(jsonPath("$.scopes", hasItem("group:crud")));
   }
 
   @Test

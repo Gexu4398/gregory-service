@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "部门管理")
 @RestController
-@RequestMapping("department")
+@RequestMapping("group")
 public class GroupController {
 
   private final KeycloakGroupService keycloakGroupService;
@@ -41,7 +41,7 @@ public class GroupController {
   }
 
   @RequestMapping(method = RequestMethod.HEAD)
-  @PreAuthorize("hasAnyAuthority('department:crud')")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
   public ResponseEntity<?> statGroup(@RequestParam String name,
       @RequestParam(required = false) String parentId) {
 
@@ -55,7 +55,7 @@ public class GroupController {
 
   @PostMapping
   @Operation(summary = "新建部门")
-  @PreAuthorize("hasAnyAuthority('department:crud')")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group newGroup(@RequestBody Group group) {
 
     return keycloakGroupService.newGroup(group);
@@ -63,7 +63,7 @@ public class GroupController {
 
   @Operation(summary = "编辑部门")
   @PostMapping("{id}:rename")
-  @PreAuthorize("hasAnyAuthority('department:crud')")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group renameGroup(@PathVariable String id, @RequestBody RenameGroupRequest request) {
 
     return keycloakGroupService.renameGroup(id, request.getNewGroupName());
@@ -71,7 +71,7 @@ public class GroupController {
 
   @Operation(summary = "移动部门")
   @PostMapping("{id}:move")
-  @PreAuthorize("hasAnyAuthority('department:crud')")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group moveGroup(@PathVariable String id, @RequestBody MoveGroupRequest request) {
 
     return keycloakGroupService.moveGroup(id, request.getParentId());
@@ -79,7 +79,7 @@ public class GroupController {
 
   @GetMapping("{id}")
   @Operation(summary = "查看部门")
-  @PreAuthorize("hasAnyAuthority('department:crud')")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group getGroup(@PathVariable String id) {
 
     return keycloakGroupService.getGroup(id);
@@ -95,7 +95,7 @@ public class GroupController {
 
   @DeleteMapping("{id}")
   @Operation(summary = "删除部门")
-  @PreAuthorize("hasAnyAuthority('department:crud')")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
   public void deleteGroup(@PathVariable String id) {
 
     keycloakGroupService.deleteGroup(id);
