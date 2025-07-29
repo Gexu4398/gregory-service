@@ -18,8 +18,7 @@ public class GetUserNameByUserIdInResolver implements Resolver {
   }
 
   @Override
-  public Object getProperty(ProceedingJoinPoint joinPoint, Object proceed, String beanPath)
-      throws Exception {
+  public Object getProperty(ProceedingJoinPoint joinPoint, Object proceed, String beanPath) {
 
     final var value = DefaultResolver.getValueFromRequestPath(beanPath);
     final var userResource = keycloakService.getUserResourceById(String.valueOf(value));

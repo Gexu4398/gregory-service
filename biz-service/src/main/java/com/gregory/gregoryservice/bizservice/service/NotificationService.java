@@ -5,6 +5,7 @@ import com.gregory.gregoryservice.bizmodel.model.NotificationRead;
 import com.gregory.gregoryservice.bizmodel.model.NotificationRead_;
 import com.gregory.gregoryservice.bizmodel.model.Notification_;
 import com.gregory.gregoryservice.bizmodel.repository.NotificationRepository;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,7 @@ public class NotificationService {
   private static Specification<Notification> hasBeenReadByUserId(String userId) {
 
     return (root, query, criteriaBuilder) -> {
+      Objects.requireNonNull(query, "CriteriaQuery cannot be null");
       final var subQuery = query.subquery(NotificationRead.class);
       final var subQueryRoot = subQuery.from(NotificationRead.class);
       subQuery.select(subQueryRoot)

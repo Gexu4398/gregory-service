@@ -17,8 +17,7 @@ public class GetNameByGroupIdResolver implements Resolver {
   }
 
   @Override
-  public Object getProperty(ProceedingJoinPoint joinPoint, Object proceed, String beanPath)
-      throws Exception {
+  public Object getProperty(ProceedingJoinPoint joinPoint, Object proceed, String beanPath) {
 
     final var value = DefaultResolver.getValueFromRequestPath(beanPath);
     final var group = keycloakGroupService.getGroup(String.valueOf(value));
