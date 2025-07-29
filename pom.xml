@@ -52,7 +52,6 @@
     <javafaker-version>1.0.2</javafaker-version>
     <joda.time-version>2.14.0</joda.time-version>
     <junit.suite-version>1.13.4</junit.suite-version>
-    <rome.opml-version>2.1.0</rome.opml-version>
     <hibernate-platform.version>7.0.8.Final</hibernate-platform.version>
     <jandex.version>3.3.1</jandex.version>
     <jakarta.persistence-api.version>3.2.0</jakarta.persistence-api.version>
@@ -116,11 +115,6 @@
             <artifactId>snakeyaml</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>com.rometools</groupId>
-        <artifactId>rome-opml</artifactId>
-        <version>${rome.opml-version}</version>
       </dependency>
       <dependency>
         <groupId>joda-time</groupId>
