@@ -1,13 +1,13 @@
 package com.gregory.gregoryservice.bizkeycloakmodel.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.gregory.gregoryservice.bizkeycloakmodel.repository.KeycloakGroupRepository;
+import com.gregory.gregoryservice.bizkeycloakmodel.repository.KeycloakRoleRepository;
+import com.gregory.gregoryservice.bizkeycloakmodel.repository.UserEntityRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import com.gregory.gregoryservice.bizkeycloakmodel.repository.KeycloakGroupRepository;
-import com.gregory.gregoryservice.bizkeycloakmodel.repository.KeycloakRoleRepository;
-import com.gregory.gregoryservice.bizkeycloakmodel.repository.UserEntityRepository;
 import lombok.Cleanup;
 import lombok.Getter;
 import org.keycloak.admin.client.CreatedResponseUtil;

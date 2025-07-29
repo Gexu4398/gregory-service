@@ -4,12 +4,11 @@ import com.gregory.gregoryservice.bizkeycloakmodel.model.KeycloakRole;
 import com.gregory.gregoryservice.bizkeycloakmodel.model.UserEntity;
 import com.gregory.gregoryservice.bizkeycloakmodel.repository.UserEntityRepository;
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakService;
+import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mockito;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-
-import java.util.Optional;
-import java.util.Set;
 
 public class UnitTestEnvironment extends TestEnvironment {
 

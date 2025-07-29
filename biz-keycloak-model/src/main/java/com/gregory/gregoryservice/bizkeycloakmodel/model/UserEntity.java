@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,11 +40,11 @@ public class UserEntity {
   @Column(name = "EMAIL_CONSTRAINT")
   private String emailConstraint;
 
-  @Builder.Default
+  @Default
   @Column(name = "EMAIL_VERIFIED", nullable = false)
   private Boolean emailVerified = false;
 
-  @Builder.Default
+  @Default
   @Column(name = "ENABLED", nullable = false)
   private Boolean enabled = false;
 

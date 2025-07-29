@@ -1,5 +1,6 @@
 package com.gregory.gregoryservice.testenvironments.service;
 
+import java.util.Collections;
 import lombok.SneakyThrows;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +11,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.containers.GenericContainer;
-
-import java.util.Collections;
 
 @Service
 public class KeycloakAccessTokenService {

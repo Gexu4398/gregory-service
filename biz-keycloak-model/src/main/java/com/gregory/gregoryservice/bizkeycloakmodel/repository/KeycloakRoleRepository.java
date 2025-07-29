@@ -1,8 +1,8 @@
 package com.gregory.gregoryservice.bizkeycloakmodel.repository;
 
+import com.gregory.gregoryservice.bizkeycloakmodel.model.KeycloakRole;
 import java.util.Optional;
 import java.util.Set;
-import com.gregory.gregoryservice.bizkeycloakmodel.model.KeycloakRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

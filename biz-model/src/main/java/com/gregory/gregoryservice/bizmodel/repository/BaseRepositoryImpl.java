@@ -2,10 +2,9 @@ package com.gregory.gregoryservice.bizmodel.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.io.Serializable;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-
-import java.io.Serializable;
 
 public class BaseRepositoryImpl<T, ID extends Serializable>
     extends SimpleJpaRepository<T, ID>

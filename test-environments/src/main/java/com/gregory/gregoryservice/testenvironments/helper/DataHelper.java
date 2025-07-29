@@ -11,13 +11,13 @@ import com.gregory.gregoryservice.bizkeycloakmodel.repository.UserEntityReposito
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakGroupService;
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakRoleService;
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakUserService;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Component
 @Validated

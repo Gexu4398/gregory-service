@@ -1,7 +1,7 @@
 package com.gregory.gregoryservice.bizkeycloakmodel.model.request;
 
-import java.util.Set;
 import com.gregory.gregoryservice.bizkeycloakmodel.validator.NotSuperAdminRoleId;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

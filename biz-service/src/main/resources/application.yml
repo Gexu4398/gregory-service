@@ -15,6 +15,9 @@ spring:
     name: biz-service
   profiles:
     active: @activatedProfile@
+  threads:
+    virtual:
+      enabled: true
   security:
     oauth2:
       resourceserver:
@@ -33,6 +36,8 @@ springdoc:
     path: /swagger-ui.html
     oauth:
       client-id: console-cli
+    tags-sorter: alpha
+    doc-expansion: alpha
 
 keycloak:
   realm: ${KEYCLOAK_REALM:console-app}
