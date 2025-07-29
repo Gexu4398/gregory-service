@@ -78,12 +78,14 @@ public class KeycloakUserService {
 
   private static Specification<UserEntity> nameLike(String keyword) {
 
-    return (root, query, criteriaBuilder) ->
-        StrUtil.isNotBlank(keyword) ?
-            criteriaBuilder.or(
-                criteriaBuilder.like(root.get(UserEntity_.FIRST_NAME), "%" + keyword + "%"),
-                criteriaBuilder.like(root.get(UserEntity_.USERNAME), "%" + keyword + "%")) :
-            criteriaBuilder.and();
+    return (root, query, criteriaBuilder) -> {
+      if (StrUtil.isBlank(keyword)) {
+        return criteriaBuilder.and();
+      }
+      return criteriaBuilder.or(
+          criteriaBuilder.like(root.get(UserEntity_.FIRST_NAME), "%" + keyword + "%"),
+          criteriaBuilder.like(root.get(UserEntity_.USERNAME), "%" + keyword + "%"));
+    };
   }
 
   private static Specification<UserEntity> statusIn(Set<String> statusSet) {
