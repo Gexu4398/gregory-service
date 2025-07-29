@@ -54,7 +54,6 @@
     <junit.suite-version>1.13.4</junit.suite-version>
     <rome.opml-version>2.1.0</rome.opml-version>
     <hibernate-platform.version>7.0.8.Final</hibernate-platform.version>
-    <jandex.version>3.3.1</jandex.version>
     <jakarta.persistence-api.version>3.2.0</jakarta.persistence-api.version>
     <maven.build.timestamp.format>yyyMMddHHmmss</maven.build.timestamp.format>
   </properties>
