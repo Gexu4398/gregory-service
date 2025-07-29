@@ -71,8 +71,6 @@ public abstract class KeycloakIntegrationTestEnvironment extends TestEnvironment
     registry.add("app.datasource.keycloak.username", () -> "root");
     registry.add("app.datasource.keycloak.password", () -> "example");
     registry.add("app.datasource.keycloak.driver-class-name", () -> "org.postgresql.Driver");
-    registry.add("app.datasource.keycloak.dialect",
-        () -> "org.hibernate.dialect.PostgreSQLDialect");
   }
 
   @AfterEach
