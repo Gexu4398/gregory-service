@@ -20,6 +20,7 @@
     <module>biz-service</module>
     <module>biz-keycloak-model</module>
     <module>biz-model</module>
+    <module>test-environments</module>
   </modules>
 
   <profiles>
