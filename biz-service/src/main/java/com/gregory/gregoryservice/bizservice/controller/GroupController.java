@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "部门管理")
+@Tag(name = "用户组管理")
 @RestController
 @RequestMapping("group")
 public class GroupController {
