@@ -6,6 +6,9 @@ import com.gregory.gregoryservice.bizkeycloakmodel.model.request.MoveGroupReques
 import com.gregory.gregoryservice.bizkeycloakmodel.model.request.RenameGroupRequest;
 import com.gregory.gregoryservice.bizkeycloakmodel.repository.KeycloakGroupRepository;
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakGroupService;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.bizlogger.BizLogger;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.GetNameByGroupIdResolver;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.Resolve;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -53,30 +56,6 @@ public class GroupController {
     }
   }
 
-  @PostMapping
-  @Operation(summary = "新建用户组")
-  @PreAuthorize("hasAnyAuthority('group:crud')")
-  public Group newGroup(@RequestBody Group group) {
-
-    return keycloakGroupService.newGroup(group);
-  }
-
-  @Operation(summary = "编辑用户组")
-  @PostMapping("{id}:rename")
-  @PreAuthorize("hasAnyAuthority('group:crud')")
-  public Group renameGroup(@PathVariable String id, @RequestBody RenameGroupRequest request) {
-
-    return keycloakGroupService.renameGroup(id, request.getNewGroupName());
-  }
-
-  @Operation(summary = "移动用户组")
-  @PostMapping("{id}:move")
-  @PreAuthorize("hasAnyAuthority('group:crud')")
-  public Group moveGroup(@PathVariable String id, @RequestBody MoveGroupRequest request) {
-
-    return keycloakGroupService.moveGroup(id, request.getParentId());
-  }
-
   @GetMapping("{id}")
   @Operation(summary = "查看用户组")
   @PreAuthorize("hasAnyAuthority('group:crud')")
@@ -93,6 +72,48 @@ public class GroupController {
     return keycloakGroupService.getGroups();
   }
 
+  @BizLogger(module = @Resolve("'用户组管理'"), type = "新建",
+      contentFormat = "新建用户组【%s】",
+      contentFormatArguments = @Resolve("response.name"),
+      targetId = @Resolve("response.id"),
+      targetName = @Resolve("response.name"),
+      targetType = @Resolve("'用户组'"))
+  @PostMapping
+  @Operation(summary = "新建用户组")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
+  public Group newGroup(@RequestBody Group group) {
+
+    return keycloakGroupService.newGroup(group);
+  }
+
+  @BizLogger(module = @Resolve("'用户组管理'"), type = "编辑",
+      contentFormat = "编辑用户组【%s】",
+      contentFormatArguments = @Resolve("response.name"),
+      targetId = @Resolve("request.path.id"),
+      targetName = @Resolve("response.name"),
+      targetType = @Resolve("'用户组'"))
+  @Operation(summary = "编辑用户组")
+  @PostMapping("{id}:rename")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
+  public Group renameGroup(@PathVariable String id, @RequestBody RenameGroupRequest request) {
+
+    return keycloakGroupService.renameGroup(id, request.getNewGroupName());
+  }
+
+  @Operation(summary = "移动用户组")
+  @PostMapping("{id}:move")
+  @PreAuthorize("hasAnyAuthority('group:crud')")
+  public Group moveGroup(@PathVariable String id, @RequestBody MoveGroupRequest request) {
+
+    return keycloakGroupService.moveGroup(id, request.getParentId());
+  }
+
+  @BizLogger(module = @Resolve("'用户组管理'"), type = "删除",
+      contentFormat = "删除用户组【%s】",
+      contentFormatArguments = @Resolve(value = "request.path.id", resolver = GetNameByGroupIdResolver.class),
+      targetId = @Resolve("request.path.id"),
+      targetName = @Resolve("response.name"),
+      targetType = @Resolve("'用户组'"))
   @DeleteMapping("{id}")
   @Operation(summary = "删除用户组")
   @PreAuthorize("hasAnyAuthority('group:crud')")

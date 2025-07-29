@@ -7,6 +7,8 @@ import com.gregory.gregoryservice.bizkeycloakmodel.repository.KeycloakRoleReposi
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakRoleService;
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakService;
 import com.gregory.gregoryservice.bizkeycloakmodel.validator.NotSuperAdminRole;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.bizlogger.BizLogger;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.Resolve;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -59,21 +61,12 @@ public class RoleController {
     }
   }
 
-  @PostMapping
-  @Operation(summary = "新建角色")
+  @GetMapping("{roleName}")
+  @Operation(summary = "获取角色详情")
   @PreAuthorize("hasAnyAuthority('role:crud')")
-  public Role newRole(@Valid @RequestBody NewRoleRequest newRoleRequest) {
+  public Role getRole(@PathVariable String roleName) {
 
-    return roleService.newRole(newRoleRequest);
-  }
-
-  @PutMapping("{roleName}")
-  @Operation(summary = "编辑角色权限")
-  @PreAuthorize("hasAnyAuthority('role:crud')")
-  public Role updateRole(@NotSuperAdminRole @PathVariable String roleName,
-      @RequestBody Set<String> scopes) {
-
-    return roleService.updateRole(roleName, scopes);
+    return roleService.getRole(roleName);
   }
 
   @GetMapping
@@ -95,14 +88,47 @@ public class RoleController {
         .toList();
   }
 
-  @GetMapping("{roleName}")
-  @Operation(summary = "获取角色详情")
+  @BizLogger(
+      module = @Resolve("'角色管理'"),
+      type = "新建",
+      contentFormat = "新建角色【%s】",
+      contentFormatArguments = @Resolve("response.name"),
+      targetId = @Resolve("response.name"),
+      targetName = @Resolve("response.name"),
+      targetType = @Resolve("'角色'"))
+  @PostMapping
+  @Operation(summary = "新建角色")
   @PreAuthorize("hasAnyAuthority('role:crud')")
-  public Role getRole(@PathVariable String roleName) {
+  public Role newRole(@Valid @RequestBody NewRoleRequest newRoleRequest) {
 
-    return roleService.getRole(roleName);
+    return roleService.newRole(newRoleRequest);
   }
 
+  @BizLogger(
+      module = @Resolve("'角色管理'"),
+      type = "编辑",
+      contentFormat = "编辑角色【%s】",
+      contentFormatArguments = @Resolve("response.name"),
+      targetId = @Resolve("response.name"),
+      targetName = @Resolve("response.name"),
+      targetType = @Resolve("'角色'"))
+  @PutMapping("{roleName}")
+  @Operation(summary = "编辑角色权限")
+  @PreAuthorize("hasAnyAuthority('role:crud')")
+  public Role updateRole(@NotSuperAdminRole @PathVariable String roleName,
+      @RequestBody Set<String> scopes) {
+
+    return roleService.updateRole(roleName, scopes);
+  }
+
+  @BizLogger(
+      module = @Resolve("'角色管理'"),
+      type = "删除",
+      contentFormat = "删除角色【%s】",
+      contentFormatArguments = @Resolve("request.path.roleName"),
+      targetId = @Resolve("request.path.roleName"),
+      targetName = @Resolve("request.path.roleName"),
+      targetType = @Resolve("'角色'"))
   @DeleteMapping("{roleName}")
   @Operation(summary = "删除角色")
   @PreAuthorize("hasAnyAuthority('role:crud')")
@@ -111,6 +137,14 @@ public class RoleController {
     keycloakService.getClientRoleResource(roleName).remove();
   }
 
+  @BizLogger(
+      module = @Resolve("'角色管理'"),
+      type = "编辑",
+      contentFormat = "编辑角色【%s】",
+      contentFormatArguments = @Resolve("request.body.newRoleName"),
+      targetId = @Resolve("request.body.newRoleName"),
+      targetName = @Resolve("request.body.newRoleName"),
+      targetType = @Resolve("'角色'"))
   @PostMapping("{roleName}:rename")
   @Operation(summary = "重命名角色")
   @PreAuthorize("hasAnyAuthority('role:crud')")

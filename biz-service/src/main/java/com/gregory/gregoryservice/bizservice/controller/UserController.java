@@ -15,6 +15,12 @@ import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakService;
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakUserService;
 import com.gregory.gregoryservice.bizkeycloakmodel.validator.NotContainsSuperAdminUserId;
 import com.gregory.gregoryservice.bizkeycloakmodel.validator.NotSuperAdminUserId;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.bizlogger.BizLogger;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.GetNameByUserIdInPathResolver;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.GetNameByUserIdsInPathResolver;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.GetUserNameByUserIdInResolver;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.Resolve;
+import com.gregory.gregoryservice.bizservice.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -59,18 +65,21 @@ public class UserController {
 
   private final KeycloakClientService keycloakClientService;
 
+  private final NotificationService notificationService;
+
   @Autowired
   public UserController(KeycloakService keycloakService,
       KeycloakUserService keycloakUserService,
       KeycloakGroupService keycloakGroupService,
       UserEntityRepository userEntityRepository,
-      KeycloakClientService keycloakClientService) {
+      KeycloakClientService keycloakClientService, NotificationService notificationService) {
 
     this.keycloakService = keycloakService;
     this.keycloakUserService = keycloakUserService;
     this.keycloakGroupService = keycloakGroupService;
     this.userEntityRepository = userEntityRepository;
     this.keycloakClientService = keycloakClientService;
+    this.notificationService = notificationService;
   }
 
   @RequestMapping(method = RequestMethod.HEAD)
@@ -100,28 +109,6 @@ public class UserController {
         .header("x-amz-meta-status", status)
         .header("x-amz-meta-retries", map.getOrDefault("numFailures", 0).toString())
         .build();
-  }
-
-  @PostMapping
-  @Operation(summary = "新建用户")
-  @PreAuthorize("hasAnyAuthority('user:crud')")
-  @SneakyThrows
-  public User newUser(@Valid @RequestBody NewUserRequest request) {
-
-    if (request.getUsername().startsWith("reserved_")) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "请务使用 reserved_ 开头命名！");
-    }
-    return keycloakUserService.newUser(request);
-  }
-
-  @PutMapping("{id}")
-  @Operation(summary = "编辑用户")
-  @PreAuthorize("hasAnyAuthority('user:crud')")
-  @SneakyThrows
-  public User updateUser(@NotSuperAdminUserId @PathVariable String id,
-      @RequestBody UpdateUserRequest request) {
-
-    return keycloakUserService.updateUser(id, request);
   }
 
   @GetMapping("{id}")
@@ -155,6 +142,42 @@ public class UserController {
     return keycloakUserService.getUsers(roleId, groups, keyword, statusSet, pageable);
   }
 
+  @BizLogger(module = @Resolve("'用户管理'"),
+      type = "新建",
+      contentFormat = "新建用户【%s】",
+      contentFormatArguments = @Resolve(value = "request.body.username"),
+      targetId = @Resolve("response.id"),
+      targetName = @Resolve(value = "request.body.username"),
+      targetType = @Resolve("'用户'"))
+  @PostMapping
+  @Operation(summary = "新建用户")
+  @PreAuthorize("hasAnyAuthority('user:crud')")
+  @SneakyThrows
+  public User newUser(@Valid @RequestBody NewUserRequest request) {
+
+    if (request.getUsername().startsWith("reserved_")) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "请务使用 reserved_ 开头命名！");
+    }
+    return keycloakUserService.newUser(request);
+  }
+
+  @BizLogger(module = @Resolve("'用户管理'"),
+      type = "编辑",
+      contentFormat = "编辑用户【%s】",
+      contentFormatArguments = @Resolve(value = "request.path.id", resolver = GetUserNameByUserIdInResolver.class),
+      targetId = @Resolve("request.path.id"),
+      targetName = @Resolve(value = "request.path.id", resolver = GetUserNameByUserIdInResolver.class),
+      targetType = @Resolve("'用户'"))
+  @PutMapping("{id}")
+  @Operation(summary = "编辑用户")
+  @PreAuthorize("hasAnyAuthority('user:crud')")
+  @SneakyThrows
+  public User updateUser(@NotSuperAdminUserId @PathVariable String id,
+      @RequestBody UpdateUserRequest request) {
+
+    return keycloakUserService.updateUser(id, request);
+  }
+
   @SneakyThrows
   @PostMapping("{id}:enable")
   @Operation(summary = "启用用户")
@@ -183,6 +206,15 @@ public class UserController {
     }
   }
 
+  @BizLogger(
+      type = "重置密码",
+      module = @Resolve("'用户管理'"),
+      contentFormat = "重置密码【%s】",
+      contentFormatArguments = @Resolve(value = "request.path.id", resolver = GetNameByUserIdInPathResolver.class),
+      targetId = @Resolve("request.path.id"),
+      targetName = @Resolve(value = "request.path.id", resolver = GetNameByUserIdInPathResolver.class),
+      targetType = @Resolve("'用户'")
+  )
   @PostMapping("{id}:reset-password")
   @Operation(summary = "重置密码")
   @PreAuthorize("hasAnyAuthority('user:reset_password')")
@@ -194,6 +226,15 @@ public class UserController {
     }
   }
 
+  @BizLogger(
+      type = "删除",
+      module = @Resolve("'用户管理'"),
+      contentFormat = "删除用户【%s】",
+      contentFormatArguments = @Resolve(value = "request.path.id", resolver = GetUserNameByUserIdInResolver.class),
+      targetId = @Resolve("request.path.id"),
+      targetName = @Resolve(value = "request.path.id", resolver = GetUserNameByUserIdInResolver.class),
+      targetType = @Resolve("'用户'")
+  )
   @DeleteMapping("{id}")
   @Operation(summary = "删除用户")
   @PreAuthorize("hasAnyAuthority('user:crud')")
@@ -230,6 +271,15 @@ public class UserController {
     }
   }
 
+  @BizLogger(
+      type = "审核",
+      module = @Resolve("'用户管理'"),
+      contentFormat = "审核用户【%s】",
+      contentFormatArguments = @Resolve(value = "request.path.id",resolver = GetNameByUserIdsInPathResolver.class),
+      targetId = @Resolve(value = "request.path.id"),
+      targetName = @Resolve(value = "request.path.id",resolver = GetNameByUserIdsInPathResolver.class),
+      targetType = @Resolve("'用户'")
+  )
   @PostMapping("{id}:accept")
   @Operation(summary = "审批通过")
   @PreAuthorize("hasAnyAuthority('user:check')")
@@ -238,6 +288,9 @@ public class UserController {
 
     for (final var id : ids) {
       keycloakService.acceptUser(id, request.getRoleName(), request.getMemo());
+      final var username = keycloakUserService.getUser(id).getUsername();
+      notificationService.createUserNotification(id, "系统消息",
+          String.format("你的账号申请已通过，账号名：%s, 角色: %s", username, request.getRoleName()));
     }
   }
 
@@ -249,6 +302,8 @@ public class UserController {
 
     for (final var id : ids) {
       keycloakService.rejectUser(id, request.getMemo());
+      notificationService.createUserNotification(id, "系统消息",
+          String.format("您的注册账号申请被驳回，审批意见：%s", request.getMemo()));
     }
   }
 

@@ -2,6 +2,9 @@ package com.gregory.gregoryservice.bizservice.controller;
 
 import com.gregory.gregoryservice.bizkeycloakmodel.service.KeycloakUserService;
 import com.gregory.gregoryservice.bizkeycloakmodel.validator.NotSuperAdminUsername;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.bizlogger.BizLogger;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.GetNameByUserNameInPathResolver;
+import com.gregory.gregoryservice.bizservice.aspect.annotation.resolver.Resolve;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,16 @@ public class ResetPasswordController {
     this.keycloakUserService = keycloakUserService;
   }
 
+  @BizLogger(
+      type = "登录",
+      module = @Resolve("'登录'"),
+      contentFormat = "用户【%s】申请重置密码",
+      contentFormatArguments = @Resolve(value = "request.path.username"),
+      targetId = @Resolve(value = "request.path.username", resolver = GetNameByUserNameInPathResolver.class),
+      targetName = @Resolve(value = "request.path.username"),
+      targetType = @Resolve("'用户'"),
+      isLogin = false
+  )
   @PostMapping("{username}")
   @Operation(summary = "用户重置")
   @PreAuthorize("isAnonymous()")
