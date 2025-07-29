@@ -220,7 +220,7 @@ public class UserController {
   }
 
   @PostMapping("{id}/group/{groupId}")
-  @Operation(summary = "批量调整部门")
+  @Operation(summary = "批量调整用户组")
   @PreAuthorize("hasAnyAuthority('user:crud')")
   public void assignGroup(@NotContainsSuperAdminUserId @PathVariable("id") List<String> ids,
       @PathVariable String groupId) {

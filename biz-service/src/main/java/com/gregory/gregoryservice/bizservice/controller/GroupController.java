@@ -54,14 +54,14 @@ public class GroupController {
   }
 
   @PostMapping
-  @Operation(summary = "新建部门")
+  @Operation(summary = "新建用户组")
   @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group newGroup(@RequestBody Group group) {
 
     return keycloakGroupService.newGroup(group);
   }
 
-  @Operation(summary = "编辑部门")
+  @Operation(summary = "编辑用户组")
   @PostMapping("{id}:rename")
   @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group renameGroup(@PathVariable String id, @RequestBody RenameGroupRequest request) {
@@ -69,7 +69,7 @@ public class GroupController {
     return keycloakGroupService.renameGroup(id, request.getNewGroupName());
   }
 
-  @Operation(summary = "移动部门")
+  @Operation(summary = "移动用户组")
   @PostMapping("{id}:move")
   @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group moveGroup(@PathVariable String id, @RequestBody MoveGroupRequest request) {
@@ -78,7 +78,7 @@ public class GroupController {
   }
 
   @GetMapping("{id}")
-  @Operation(summary = "查看部门")
+  @Operation(summary = "查看用户组")
   @PreAuthorize("hasAnyAuthority('group:crud')")
   public Group getGroup(@PathVariable String id) {
 
@@ -86,7 +86,7 @@ public class GroupController {
   }
 
   @GetMapping
-  @Operation(summary = "获取部门")
+  @Operation(summary = "获取用户组")
   @PreAuthorize("permitAll()")
   public List<Group> getGroups() {
 
@@ -94,7 +94,7 @@ public class GroupController {
   }
 
   @DeleteMapping("{id}")
-  @Operation(summary = "删除部门")
+  @Operation(summary = "删除用户组")
   @PreAuthorize("hasAnyAuthority('group:crud')")
   public void deleteGroup(@PathVariable String id) {
 

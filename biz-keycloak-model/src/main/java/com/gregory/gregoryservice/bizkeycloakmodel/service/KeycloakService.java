@@ -224,7 +224,7 @@ public class KeycloakService {
     if (groupId != null) {
       userResource.groups().forEach(it -> userResource.leaveGroup(it.getId()));
       keycloakGroupRepository.findById(groupId)
-          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "部门不存在！"));
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "用户组不存在！"));
       userResource.joinGroup(groupId);
     } else {
       userResource.groups().forEach(it -> userResource.leaveGroup(it.getId()));
@@ -390,7 +390,7 @@ public class KeycloakService {
   }
 
   /**
-   * 迁移部门，当用户同时只能在一个部门时调用
+   * 迁移用户组，当用户同时只能在一个用户组时调用
    */
   public void migrateGroup(String id, String groupId) {
 

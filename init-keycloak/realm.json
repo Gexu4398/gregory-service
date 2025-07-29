@@ -1107,7 +1107,7 @@
     {
       "id" : "f225a23c-5df8-49ef-9619-c9d73a113368",
       "name" : "group:crud",
-      "description" : "部门增删改",
+      "description" : "用户组增删改",
       "protocol" : "openid-connect",
       "attributes" : {
         "include.in.token.scope" : "true",
