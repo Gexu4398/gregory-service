@@ -1,0 +1,63 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api/v1
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-exception: false
+    # 如果前端请求带参 ?trace=true 则会显示 trace 字段
+    include-stacktrace: on_param
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: biz-service
+  profiles:
+    active: @activatedProfile@
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://${KEYCLOAK_HOST:localhost}:8080/auth/realms/${KEYCLOAK_REALM:console-app}/protocol/openid-connect/certs
+  jpa:
+    open-in-view: true
+
+management:
+  endpoints:
+    access:
+      default: read_only
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    oauth:
+      client-id: console-cli
+
+keycloak:
+  realm: ${KEYCLOAK_REALM:console-app}
+  client-id: ${KEYCLOAK_CLIENT_ID:console-cli}
+  auth-server-url: http://${KEYCLOAK_HOST:localhost}:8080/auth
+  admin:
+    password: admin
+    username: admin
+
+app:
+  datasource:
+    biz:
+      url: jdbc:postgresql://${POSTGRESQL_HOST:localhost}:5432/tp
+      jdbcUrl: jdbc:postgresql://${POSTGRESQL_HOST:localhost}:5432/tp
+      username: root
+      password: ${POSTGRESQL_ROOT_PASSWORD:example}
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        maximum-pool-size: 100
+        minimum-idle: 30
+      liquibase:
+        change-log: db/changelog/changelog-master.xml
+    keycloak:
+      url: jdbc:postgresql://${POSTGRESQL_HOST:localhost}:5432/keycloak
+      jdbcUrl: jdbc:postgresql://${POSTGRESQL_HOST:localhost}:5432/keycloak
+      username: root
+      password: ${POSTGRESQL_ROOT_PASSWORD:example}
+      driver-class-name: org.postgresql.Driver

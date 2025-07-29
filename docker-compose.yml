@@ -1,0 +1,41 @@
+services:
+
+  postgres:
+    image: postgres:alpine3.22
+    restart: always
+    command: postgres -c 'max_connections=250'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=example
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-postgres:/docker-entrypoint-initdb.d
+
+  keycloak:
+    image: keycloak/keycloak:26.3.2
+    environment:
+      - BASE_URL=http://localhost/
+      - APP_NAME=MySystem
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=example
+      # 主机名，生产环境使用IP或域名
+      - KC_HOSTNAME=localhost
+      # 禁用主机名严格检查
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_RELATIVE_PATH=/auth
+      - KC_PROXY_HEADERS=xforwarded
+    # 交给nginx转发时，在下方加入 --http-port=3000 并注释 ports
+    command: start --http-enabled=true --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false
+    volumes:
+      - ./init-keycloak/realm.json:/opt/keycloak/data/import/realm.json
+      - ./init-keycloak/tp-theme:/opt/keycloak/themes/tp-theme
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
