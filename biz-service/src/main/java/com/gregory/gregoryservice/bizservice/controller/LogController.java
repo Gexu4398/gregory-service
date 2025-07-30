@@ -35,15 +35,15 @@ public class LogController {
   @Operation(summary = "展示日志")
   @SneakyThrows
   public Page<BizLog> getLogs(
+      @RequestParam(name = "q", required = false) String keyword,
       @RequestParam(required = false) String type,
       @RequestParam(required = false) String ip,
       @RequestParam(required = false) String username,
-      @RequestParam(required = false) String q,
       @RequestParam(name = "module", required = false) Set<String> modules,
       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Calendar fromDate,
       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Calendar toDate,
       Pageable pageable) {
 
-    return logService.getLogs(q, fromDate, toDate, type, ip, username, modules, pageable);
+    return logService.getLogs(keyword, fromDate, toDate, type, ip, username, modules, pageable);
   }
 }

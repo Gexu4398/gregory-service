@@ -87,10 +87,10 @@ public class LogService {
             : criteriaBuilder.and();
   }
 
-  public Page<BizLog> getLogs(String q, Calendar fromDate, Calendar toDate, String type,
+  public Page<BizLog> getLogs(String keyword, Calendar fromDate, Calendar toDate, String type,
       String ip, String username, Set<String> modules, Pageable pageable) {
 
-    return bizLogRepository.findAll(contentOrModelOrUserRoleLike(q)
+    return bizLogRepository.findAll(contentOrModelOrUserRoleLike(keyword)
         .and(betweenDate(fromDate, toDate))
         .and(typeEqual(type))
         .and(ipEqual(ip))
