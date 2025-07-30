@@ -34,14 +34,15 @@ public class LogController {
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "展示日志")
   @SneakyThrows
-  public Page<BizLog> getLogs(Pageable pageable,
+  public Page<BizLog> getLogs(
       @RequestParam(required = false) String type,
       @RequestParam(required = false) String ip,
       @RequestParam(required = false) String username,
       @RequestParam(required = false) String q,
       @RequestParam(name = "module", required = false) Set<String> modules,
       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Calendar fromDate,
-      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Calendar toDate) {
+      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Calendar toDate,
+      Pageable pageable) {
 
     return logService.getLogs(q, fromDate, toDate, type, ip, username, modules, pageable);
   }
